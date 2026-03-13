@@ -2,13 +2,17 @@
 
 EVENT=${1:-short-press}
 
-TIMEOUT=3 # s
+TIMEOUT=2 # s
 PIDFILE="/tmp/$(basename $0).pid"
 LOCKFILE=/tmp/.power_key
 
-#asdklf lxzckvkuweqri
 
 short_press()
+{
+	echo "Power key short press... nothing..." > /dev/console
+}
+
+short_press_bak()
 {
 	logger -t $(basename $0) "[$$]: Power key short press..."
 
@@ -20,14 +24,10 @@ short_press()
 
 	if [ ! -f $LOCKFILE ]; then
 		logger -t $(basename $0) "[$$]: Prepare to suspend..."
-		/oem/RkLunch-suspend.sh
 
 		touch $LOCKFILE
 		sh -c "$SUSPEND_CMD"
 		{ sleep 2 && rm $LOCKFILE; }&
-	else
-		echo "Power key Prepare to wake up!!!!"
-		source /etc/profile.d/RkEnv.sh && /oem/RkLunch.sh &
 	fi
 }
 
@@ -36,6 +36,15 @@ long_press()
 	logger -t $(basename $0) "[$$]: Power key long press (${TIMEOUT}s)..."
 
 	logger -t $(basename $0) "[$$]: Prepare to power off..."
+
+	# 关闭 record_auto 进程
+	echo "close record_auto process" > /dev/console
+	pkill -f record_auto || true
+	pkill -f record || true
+
+	echo "Power key long press..." > /dev/console
+	echo "Prepare to power off..." > /dev/console
+	sync
 
 	poweroff
 }
