@@ -37,13 +37,9 @@ long_press()
 
 	logger -t $(basename $0) "[$$]: Prepare to power off..."
 
-	# 关闭 record_auto 进程
-	echo "close record_auto process" > /dev/console
-	pkill -f record_auto || true
-	pkill -f record || true
-
 	echo "Power key long press..." > /dev/console
 	echo "Prepare to power off..." > /dev/console
+	pkill -f gst-rec-split-demo
 	sync
 
 	poweroff
