@@ -1,0 +1,2 @@
+KERNEL=="mmcblk*p*", SUBSYSTEM=="block", ACTION=="add", RUN+="/userdata/scripts/sd-mount.sh"
+KERNEL=="mmcblk*p*", SUBSYSTEM=="block", ACTION=="remove", RUN+="/userdata/scripts/sd-umount.sh"
