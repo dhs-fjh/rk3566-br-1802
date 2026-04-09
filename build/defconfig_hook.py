@@ -131,6 +131,10 @@ def merge_cfgs(config, output):
                 overlay = m.group(1)
 
         f.write(result)
+        # If the merged text does not end with a newline, the next write would
+        # concatenate BR2_ROOTFS_OVERLAY onto the previous line and break Kconfig.
+        if result and not result.endswith('\n'):
+            f.write('\n')
         f.write('BR2_ROOTFS_OVERLAY="' + overlay + '"\n')
 
 def print_usage():
