@@ -1,2 +1,5 @@
-KERNEL=="mmcblk*p*", SUBSYSTEM=="block", ACTION=="add", RUN+="/userdata/scripts/sd-mount.sh"
-KERNEL=="mmcblk*p*", SUBSYSTEM=="block", ACTION=="remove", RUN+="/userdata/scripts/sd-umount.sh"
+# overlay tar path: buildroot/board/rockchip/rk356x/fs-overlay/etc/udev/rules.d/99-sdcard.rules
+# system tar path: /etc/udev/rules.d/99-sdcard.rules
+# test
+KERNEL=="mmcblk1p1", SUBSYSTEM=="block", ACTION=="add", RUN+="/userdata/scripts/sd-mount.sh"
+KERNEL=="mmcblk1p1", SUBSYSTEM=="block", ACTION=="remove", RUN+="/userdata/scripts/sd-umount.sh"
