@@ -1,0 +1,69 @@
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
+
+if [ "$PS1" ]; then
+  if [ "$BASH" ]; then
+    # The file bash.bashrc already sets the default PS1.
+    # PS1='\h:\w\$ '
+    if [ -f /etc/bash.bashrc ]; then
+      . /etc/bash.bashrc
+    fi
+  else
+    if [ "`id -u`" -eq 0 ]; then
+      PS1='# '
+    else
+      PS1='$ '
+    fi
+  fi
+fi
+
+export EDITOR='/bin/vi'
+
+# Source configuration files from /etc/profile.d
+for i in /etc/profile.d/*.sh ; do
+	if [ -r "$i" ]; then
+		. $i
+	fi
+done
+unset i
+
+
+alias ll='ls -alFh'
+alias la='ls -Ah'
+alias l='ls -CF'
+alias df='df -Th'
+alias lsd='ls /dev'
+alias lse='ls /etc'
+
+alias lsub='ls /userdata/bin'
+alias llub='ll /userdata/bin'
+
+alias lsv='ls /mnt/sdcard'
+alias llv='ll /mnt/sdcard'
+
+alias uud='umount /mnt/udisk'
+alias usd='umount /mnt/sdcard'
+alias msd='mount /dev/mmcblk1p1 /mnt/sdcard'
+alias msdn='mount -o nonempty /dev/mmcblk1p1 /mnt/sdcard'
+alias rmrfsd='rm -rf /mnt/sdcard/*'
+
+alias rmv='rm video-*'
+alias rmvsd='rm /mnt/sdcard/video-*'
+alias rmi='rm imu-*'
+alias rmisd='rm /mnt/sdcard/imu-*'
+
+alias chb='chmod 777 /userdata/bin/*'
+alias chm7S='chmod 777 /etc/init.d/S100recorder'
+alias chm6S='chmod 666 /etc/init.d/S100recorder'
+
+alias imu-w='/userdata/bin/imu-watch'
+alias imu-c='/userdata/bin/imu-cali-simple'
+
+alias gst-get='/userdata/bin/gst-get-timestamp'
+alias gst-rec='/userdata/bin/gst-rec-split'
+
+alias new-pro='chb && cp /userdata/bin/profile /etc'
+alias new-key='chb && cp /userdata/bin/power-key.sh /etc'
+
+alias vircfg='vi /userdata/config/record.config'
+alias viicfg='vi /userdata/config/imu.config'
+

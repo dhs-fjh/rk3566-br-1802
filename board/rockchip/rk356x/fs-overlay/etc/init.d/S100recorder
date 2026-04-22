@@ -1,0 +1,95 @@
+#!/bin/sh
+#
+# Start btn_recorder daemon
+#
+
+# 配置变量
+DAEMON_NAME="gst-rec-split"
+DAEMON_PATH="/userdata/bin"
+DAEMON="${DAEMON_PATH}/${DAEMON_NAME}"
+PIDFILE="/var/run/${DAEMON_NAME}.pid"
+LOGFILE="/tmp/${DAEMON_NAME}.log"
+
+case "$1" in
+  start)
+		BAK="${DAEMON}.bak"
+
+		# 如果不存在/不可执行，先从 bak 恢复再执行
+		if [ ! -x "$DAEMON" ]; then
+			if [ -f "$BAK" ]; then
+				echo " ${DAEMON_NAME} not executable, restoring from ${BAK}" > /dev/console
+				cp -f "$BAK" "$DAEMON"
+				chmod +x "$DAEMON"
+			else
+				echo "FAILED (not found or not executable, bak missing)" > /dev/console
+				exit 1
+			fi
+		fi
+
+		attempt=1
+		while [ "$attempt" -le 2 ]; do
+			printf "Starting ${DAEMON_NAME}: "
+			# 清理旧状态
+			rm -f "$PIDFILE"
+			: > "$LOGFILE"
+
+			# Start daemon with output to log, then keep only last 100 lines
+			(
+				$DAEMON 2>&1 | while IFS= read -r line; do
+					echo "$line" >> "$LOGFILE"
+					tail -n 100 "$LOGFILE" > "$LOGFILE.tmp" && mv "$LOGFILE.tmp" "$LOGFILE"
+				done
+			) &
+			pid=$!
+			echo $pid > "$PIDFILE"
+
+			# 启动后自检：进程是否还活着 + 最近日志是否出现崩溃
+			sleep 1
+			if kill -0 "$pid" 2>/dev/null; then
+				if grep -q "Segmentation fault" "$LOGFILE" 2>/dev/null; then
+					echo "FAIL (segfault detected)"
+					kill "$pid" 2>/dev/null || true
+				elif grep -q "auto power off is disabled" "$LOGFILE" 2>/dev/null; then
+					# 该场景通常会继续运行；这里不当作失败
+					echo "OK"
+					break
+				else
+					echo "OK"
+					break
+				fi
+			else
+				echo "FAIL (process exited quickly)"
+			fi
+
+			# 若失败：覆盖恢复 bak 并重新执行（下一轮）
+			if [ -f "$BAK" ]; then
+				echo "Restoring ${DAEMON_NAME} from ${BAK}"
+				cp -f "$BAK" "$DAEMON"
+				chmod +x "$DAEMON"
+			else
+				echo "FAIL (bak missing, abort)"
+				break
+			fi
+
+			attempt=$((attempt + 1))
+		done
+
+		# 无论最终是否成功，确保脚本退出不影响 init
+		exit 0
+	;;
+  stop)
+	printf "Stopping ${DAEMON_NAME}: "
+	start-stop-daemon -K -p $PIDFILE
+	[ $? = 0 ] && echo "OK" || echo "FAIL"
+	;;
+  restart|reload)
+	"$0" stop
+	sleep 1
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit 0
