@@ -2,7 +2,7 @@
 
 EVENT=${1:-short-press}
 
-TIMEOUT=2 # s
+TIMEOUT=1.5 # s
 PIDFILE="/tmp/$(basename $0).pid"
 LOCKFILE=/tmp/.power_key
 
@@ -39,9 +39,9 @@ long_press()
 
 	echo "Power key long press..." > /dev/console
 	echo "Prepare to power off..." > /dev/console
-	pkill -f gst-rec-split-demo
+	pkill -f gst-rec*
 	sync
-
+	sleep 0.5
 	poweroff
 }
 
