@@ -33,6 +33,15 @@ alias l='ls -CF'
 alias df='df -Th'
 alias lsd='ls /dev'
 alias lse='ls /etc'
+alias lsdv='ls /dev/video*'
+alias lsdv0='v4l2-ctl --list-formats-ext -d /dev/video0'
+alias lsdv1='v4l2-ctl --list-formats-ext -d /dev/video1'
+alias lsdv2='v4l2-ctl --list-formats-ext -d /dev/video2'
+alias lsdv3='v4l2-ctl --list-formats-ext -d /dev/video3'
+alias lsdv4='v4l2-ctl --list-formats-ext -d /dev/video4'
+alias lsdv5='v4l2-ctl --list-formats-ext -d /dev/video5'
+alias lsdv6='v4l2-ctl --list-formats-ext -d /dev/video6'
+alias lsdv7='v4l2-ctl --list-formats-ext -d /dev/video7'
 
 alias lsub='ls /userdata/bin'
 alias llub='ll /userdata/bin'
@@ -46,19 +55,10 @@ alias msd='mount /dev/mmcblk1p1 /mnt/sdcard'
 alias msdn='mount -o nonempty /dev/mmcblk1p1 /mnt/sdcard'
 alias rmrfsd='rm -rf /mnt/sdcard/*'
 
-alias rmv='rm video-*'
-alias rmvsd='rm /mnt/sdcard/video-*'
-alias rmi='rm imu-*'
-alias rmisd='rm /mnt/sdcard/imu-*'
-
 alias chb='chmod 777 /userdata/bin/*'
 alias chm7S='chmod 777 /etc/init.d/S100recorder'
 alias chm6S='chmod 666 /etc/init.d/S100recorder'
 
-alias imu-w='/userdata/bin/imu-watch'
-alias imu-c='/userdata/bin/imu-cali-simple'
-
-alias gst-get='/userdata/bin/gst-get-timestamp'
 alias gst-rec='/userdata/bin/gst-rec-split'
 
 alias new-pro='chb && cp /userdata/bin/profile /etc'
@@ -66,4 +66,6 @@ alias new-key='chb && cp /userdata/bin/power-key.sh /etc'
 
 alias vircfg='vi /userdata/config/record.config'
 alias viicfg='vi /userdata/config/imu.config'
+
+alias viid='vi /oem/config/id.txt'
 
