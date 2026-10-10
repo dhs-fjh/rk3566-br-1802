@@ -35,13 +35,6 @@ alias lsd='ls /dev'
 alias lse='ls /etc'
 alias lsdv='ls /dev/video*'
 alias lsdv0='v4l2-ctl --list-formats-ext -d /dev/video0'
-alias lsdv1='v4l2-ctl --list-formats-ext -d /dev/video1'
-alias lsdv2='v4l2-ctl --list-formats-ext -d /dev/video2'
-alias lsdv3='v4l2-ctl --list-formats-ext -d /dev/video3'
-alias lsdv4='v4l2-ctl --list-formats-ext -d /dev/video4'
-alias lsdv5='v4l2-ctl --list-formats-ext -d /dev/video5'
-alias lsdv6='v4l2-ctl --list-formats-ext -d /dev/video6'
-alias lsdv7='v4l2-ctl --list-formats-ext -d /dev/video7'
 
 alias lsub='ls /userdata/bin'
 alias llub='ll /userdata/bin'
@@ -68,4 +61,3 @@ alias vircfg='vi /userdata/config/record.config'
 alias viicfg='vi /userdata/config/imu.config'
 
 alias viid='vi /oem/config/id.txt'
-
